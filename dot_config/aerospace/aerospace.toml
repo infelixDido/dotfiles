@@ -1,0 +1,124 @@
+config-version = 2
+
+after-startup-command = [
+  'exec-and-forget sketchybar',
+  'exec-and-forget borders style=round width=2.0 hidpi=on active_color=0x887aa2f7 inactive_color=0x00000000',
+]
+
+# Notify Sketchybar about workspace change
+exec-on-workspace-change = ['/bin/bash', '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
+start-at-login = true
+auto-reload-config = true
+
+focus-follows-mouse.enabled = true
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# [[on-window-detected]]
+# if.app-id = 'com.apple.finder'
+# run = ['layout floating', 'move-node-to-workspace S']
+#
+# [[on-window-detected]]
+# if.app-id = 'com.apple.systempreferences'
+# run = ['layout floating', 'move-node-to-workspace S']
+
+[gaps]
+
+inner.horizontal = 6
+inner.vertical = 6
+
+outer.left = 6
+outer.right = 6
+outer.bottom = 6
+outer.top = 33
+
+[mode.main.binding]
+
+# Focus
+alt-left  = 'focus left'
+alt-down  = 'focus down'
+alt-up    = 'focus up'
+alt-right = 'focus right'
+
+# Swap windows
+alt-shift-left  = 'swap left'
+alt-shift-down  = 'swap down'
+alt-shift-up    = 'swap up'
+alt-shift-right = 'swap right'
+
+# Workspaces
+alt-1 = 'workspace 1'
+alt-2 = 'workspace 2'
+alt-3 = 'workspace 3'
+alt-4 = 'workspace 4'
+alt-5 = 'workspace 5'
+alt-6 = 'workspace 6'
+alt-7 = 'workspace 7'
+alt-8 = 'workspace 8'
+alt-9 = 'workspace 9'
+
+# Move window to workspace and follow
+alt-shift-1 = ['move-node-to-workspace 1', 'workspace 1']
+alt-shift-2 = ['move-node-to-workspace 2', 'workspace 2']
+alt-shift-3 = ['move-node-to-workspace 3', 'workspace 3']
+alt-shift-4 = ['move-node-to-workspace 4', 'workspace 4']
+alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
+alt-shift-6 = ['move-node-to-workspace 6', 'workspace 6']
+alt-shift-7 = ['move-node-to-workspace 7', 'workspace 7']
+alt-shift-8 = ['move-node-to-workspace 8', 'workspace 8']
+alt-shift-9 = ['move-node-to-workspace 9', 'workspace 9']
+
+# Workspace navigation
+alt-tab = 'workspace --wrap-around next'
+alt-shift-tab = 'workspace --wrap-around prev'
+alt-ctrl-tab = 'workspace-back-and-forth'
+
+# Layout / window state
+alt-f = 'fullscreen'
+alt-t = 'layout floating tiling'
+alt-j = 'layout horizontal vertical'
+alt-l = 'layout tiles accordion'
+alt-o = 'layout floating'
+
+# Explicit layout controls from the default AeroSpace config
+alt-slash = 'layout tiles horizontal vertical'
+alt-comma = 'layout accordion horizontal vertical'
+
+# Resize
+alt-minus = 'resize width +50'
+alt-equal = 'resize width -50'
+alt-shift-minus = 'resize height -50'
+alt-shift-equal = 'resize height +50'
+
+# Close
+alt-w = 'close'
+alt-q = 'close'
+
+# Launchers
+alt-enter = 'exec-and-forget /Applications/kitty.app/Contents/MacOS/kitty --single-instance --directory "$HOME"'
+alt-shift-b = 'exec-and-forget open -na "Zen"'
+
+# Utility mode
+alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+esc = ['reload-config', 'mode main']
+r = ['flatten-workspace-tree', 'mode main']
+b = ['balance-sizes', 'mode main']
+f = ['layout floating tiling', 'mode main']
+backspace = ['close-all-windows-but-current', 'mode main']
+left = ['join-with left', 'mode main']
+down = ['join-with down', 'mode main']
+up = ['join-with up', 'mode main']
+right = ['join-with right', 'mode main']
+

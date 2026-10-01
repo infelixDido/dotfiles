@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+CONFIG_DIR="$HOME/.config/sketchybar"
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+
+# Tokyo Night
+BG=0xaa1a1b26
+FG=0xffc0caf5
+DIM=0xff565f89
+BLUE=0xff7aa2f7
+CYAN=0xff7dcfff
+GREEN=0xff9ece6a
+YELLOW=0xffe0af68
+
+# --------------------------------------------------
+# Bar
+# --------------------------------------------------
+
+sketchybar --bar \
+  position=top \
+  height=28 \
+  color=$BG \
+  blur_radius=24 \
+  shadow=off \
+  border_width=0 \
+  padding_left=6 \
+  padding_right=6
+
+# --------------------------------------------------
+# Defaults
+# --------------------------------------------------
+
+sketchybar --default \
+  icon.font="Hack Nerd Font:Bold:13.0" \
+  label.font="Hack Nerd Font:Bold:12.0" \
+  icon.color=$FG \
+  label.color=$FG \
+  icon.padding_left=4 \
+  icon.padding_right=4 \
+  label.padding_left=4 \
+  label.padding_right=4 \
+  padding_left=2 \
+  padding_right=2
+
+# --------------------------------------------------
+# AeroSpace Workspaces
+# --------------------------------------------------
+
+sketchybar --add event aerospace_workspace_change
+
+for sid in {1..9}; do
+  sketchybar --add item space.$sid left \
+    --subscribe space.$sid aerospace_workspace_change \
+    --set space.$sid \
+      icon.drawing=off \
+      label="$sid" \
+      label.color=$DIM \
+      background.color=0x557aa2f7 \
+      background.corner_radius=6 \
+      background.height=20 \
+      background.drawing=off \
+      padding_left=1 \
+      padding_right=1 \
+      click_script="aerospace workspace $sid" \
+      script="$PLUGIN_DIR/aerospace.sh $sid"
+done
+
+# --------------------------------------------------
+# Current application
+# --------------------------------------------------
+
+sketchybar --add item front_app left \
+  --set front_app \
+    icon.drawing=off \
+    label.color=$FG \
+    label.padding_left=10 \
+    script="$PLUGIN_DIR/front_app.sh" \
+  --subscribe front_app front_app_switched
+
+# --------------------------------------------------
+# Right side
+# --------------------------------------------------
+
+sketchybar --add item battery right \
+  --set battery \
+    icon="󰁹" \
+    icon.color=$GREEN \
+    update_freq=60 \
+    script="$PLUGIN_DIR/battery.sh"
+
+sketchybar --add item clock right \
+  --set clock \
+    icon="󰥔" \
+    icon.color=$BLUE \
+    update_freq=10 \
+    script="$PLUGIN_DIR/clock.sh" \
+    click_script="open -a Calendar"
+
+sketchybar --update
