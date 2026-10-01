@@ -1,0 +1,16 @@
+# macOS
+{{ if eq .chezmoi.os "darwin" }}
+.config/nvim/lua/plugins/all-themes.lua
+.config/nvim/lua/plugins/omarchy-theme-hotreload.lua
+.config/nvim/lua/plugins/symlink_theme.lua
+{{ end }}
+
+# Omarchy
+{{ if eq .chezmoi.os "linux" }}
+.config/nvim/lua/plugins/theme.lua
+
+.config/aerospace/**
+.config/sketchybar/**
+.config/kitty/**
+.zshrc
+{{ end }}
