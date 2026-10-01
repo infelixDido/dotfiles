@@ -27,3 +27,4 @@ fi
 
 eval "$(starship init zsh)"
 export EDITOR="nvim"
+export PATH="$HOME/.local/bin:$PATH"
