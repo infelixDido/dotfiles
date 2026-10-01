@@ -1,0 +1,29 @@
+export VCPKG_ROOT="$HOME/.local/share/vcpkg"
+eval "$(zoxide init --cmd cd zsh)"
+
+# ── Tokyo Night startup ─────────────────────────────────────────────
+
+# Show startup banner once per Kitty instance
+if [[ -o interactive && -n "$KITTY_PID" ]]; then
+  banner_marker="/tmp/kitty-banner-$USER-$KITTY_PID"
+
+  if [[ ! -e "$banner_marker" ]]; then
+    touch "$banner_marker"
+
+    # Ascii
+    printf '\e[38;2;122;162;247m'
+    cat "$HOME/.config/kitty/rings.txt"
+    printf '\e[0m\n'
+
+    # Your status/dashboard stuff goes here
+    battery=$(pmset -g batt | grep -oE '[0-9]+%' | head -1)
+
+    printf '\e[38;2;86;95;137m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[0m\n'
+    printf '  \e[38;2;187;154;247m󰃭\e[0m  %s\n' "$(date '+%A · %B %e · %H:%M')"
+    printf '  \e[38;2;158;206;106m󰁹\e[0m  Battery %s\n' "$battery"
+    printf '\e[38;2;86;95;137m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\e[0m\n\n'
+  fi
+fi
+
+eval "$(starship init zsh)"
+export EDITOR="nvim"
