@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -u
+
+VAULT="${1:-$PWD}"
+FAILED=0
+
+sync_repo() {
+    local repo="$1"
+    local name="$2"
+
+    echo "=== $name ==="
+
+    # Do not interfere with a merge you are resolving manually.
+    if git -C "$repo" rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
+        echo "$name: merge in progress — finish it manually"
+        return 1
+    fi
+
+    # Do not touch unresolved conflicts.
+    if [ -n "$(git -C "$repo" diff --name-only --diff-filter=U)" ]; then
+        echo "$name: unresolved conflicts — stopping"
+        return 1
+    fi
+
+    # Save current edits as a local Git checkpoint.
+    git -C "$repo" add -A || return 1
+
+    if ! git -C "$repo" diff --cached --quiet; then
+        git -C "$repo" commit \
+            -m "vault backup: $(date '+%Y-%m-%d %H:%M:%S')" || return 1
+    fi
+
+    # Get remote changes, but refuse to merge divergent histories.
+    if ! git -C "$repo" pull --ff-only; then
+        echo "$name: DIVERGED — manual merge required"
+        return 1
+    fi
+
+    # Publish our commits. Git will reject this if the remote
+    # changed again between the pull and push.
+    git -C "$repo" push || return 1
+
+    echo "$name: synced"
+}
+
+sync_repo "$VAULT/mobile" "mobile" || FAILED=1
+sync_repo "$VAULT"        "vault"  || FAILED=1
+
+exit "$FAILED"
